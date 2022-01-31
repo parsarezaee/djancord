@@ -15,6 +15,7 @@
     {% for room in rooms %}
     <div>
       <a href="{%url 'home:update-room' room.id %}">Edit</a>
+      <a href="{%url 'home:delete-room' room.id %}">Delete</a>
       <span>@{{ room.host.username }}</a>
         <h5>{{ room.id }} -- <a href="{% url 'home:room' room.id %}">{{ room.name }}</a></h5>
         <small>{{ room.topic.name }}</small>

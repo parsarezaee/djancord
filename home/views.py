@@ -16,12 +16,15 @@ def room(request, pk):
 
 
 
-class CreatRoom(View):
+class CreateRoom(View):
     template_name = 'home/room_form.html'
-    
+
+
     def get(self, request):
         form = RoomForm()
+
         return render(request, self.template_name, {'form':form})
+
 
     def post(self, request):
         if request.method == 'POST':
@@ -29,6 +32,9 @@ class CreatRoom(View):
             if form.is_valid():
                 form.save()
                 return redirect('home:home')
+        
+
+
 
 
 class UpdateRoom(View):
@@ -39,6 +45,7 @@ class UpdateRoom(View):
         form = RoomForm(instance=room)
         return render(request, self.template_name, {'form':form})
 
+
     def post(self, request, pk):
         room = Room.objects.get(id=pk)
         if request.method == 'POST':
@@ -47,3 +54,22 @@ class UpdateRoom(View):
                  form.save()
                  return redirect('home:home')
 
+
+
+
+class DeleteRoom(View):
+    template_name = 'home/delete.html'
+    
+    def get(self, request, pk):
+        room = Room.objects.get(id=pk) 
+
+        return render(request, self.template_name, {'obj':room})
+    
+
+    def post(self, request, pk):
+        room = Room.objects.get(id=pk) 
+
+        if request.method == 'POST':
+            room.delete()
+            return redirect('home:home')
+        
