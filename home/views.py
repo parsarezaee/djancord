@@ -31,12 +31,19 @@ class CreatRoom(View):
                 return redirect('home:home')
 
 
-def updateRoom(request, pk):
-    room = Room.objects.get(id=pk)
-    form = RoomForm(instance=room)
-    if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect('home:home')
-    return render(request, 'home/room_form.html', {'form':form})
+class UpdateRoom(View):
+    template_name = 'home/room_form.html'
+
+    def get(self, request, pk):
+        room = Room.objects.get(id=pk)
+        form = RoomForm(instance=room)
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request, pk):
+        room = Room.objects.get(id=pk)
+        if request.method == 'POST':
+             form = RoomForm(request.POST, instance=room)
+             if form.is_valid():
+                 form.save()
+                 return redirect('home:home')
+
