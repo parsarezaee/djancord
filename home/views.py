@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Room
 from .forms import RoomForm
+from django.views import View
+
+
 
 def home(request):
     rooms = Room.objects.all()
@@ -13,15 +16,19 @@ def room(request, pk):
 
 
 
-def createRoom(request):
-    form = RoomForm()
-    if request.method == 'POST':
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home:home')
-            
-    return render(request, 'home/room_form.html', {'form':form})
+class CreatRoom(View):
+    template_name = 'home/room_form.html'
+    
+    def get(self, request):
+        form = RoomForm()
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request):
+        if request.method == 'POST':
+            form = RoomForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('home:home')
 
 
 def updateRoom(request, pk):
