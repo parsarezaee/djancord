@@ -1,9 +1,8 @@
+from email.message import Message
 from django.contrib import admin
-from .models import Room
+from .models import Room, Topic, Message
 
 
-@admin.register(Room)
-class RoomAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created')
-    list_filter = ('updated',)
-    prepopulated_fields = {'slug':('name',)}
+admin.site.register(Room)
+admin.site.register(Topic)
+admin.site.register(Message)
