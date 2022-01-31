@@ -5,14 +5,21 @@
 
 {% block content %}
   <h1>Home Template</h1>
+
+<div>
+
+  <a href="{% url 'home:create-room' %}">Create Room</a>
+
+  
   <div> 
     {% for room in rooms %}
-      <div>
-        <span>@{{ room.host.username }}</a>
+    <div>
+      <span>@{{ room.host.username }}</a>
         <h5>{{ room.id }} -- <a href="{% url 'home:room' room.id %}">{{ room.name }}</a></h5>
         <small>{{ room.topic.name }}</small>
         <hr>
       </div>
-    {% endfor %}
-  </div>
-{% endblock %}
+      {% endfor %}
+    </div>
+</div>  
+    {% endblock %}

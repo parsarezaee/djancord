@@ -10,3 +10,9 @@ def home(request):
 def room(request, pk):
     room = Room.objects.get(id=pk)
     return render(request, 'home/room.html', {'room':room})
+
+
+
+def createRoom(request):
+
+    return render(request, 'home/room_form.html')
