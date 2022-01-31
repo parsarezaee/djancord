@@ -7,7 +7,8 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-
+    <h2><a href="{% url 'home:home' %}">logo</a></h2>
+    <hr>
     {% include 'inc/navbar.html'  %}
     <div class="jumbotron">
       {% include 'inc/messages.html' %} {% block content %}{% endblock %}
