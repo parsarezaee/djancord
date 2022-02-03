@@ -3,11 +3,37 @@ from .models import Room, Topic
 from .forms import RoomForm
 from django.views import View
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, logout, login
 
 
-@login_required
+
+
+def loginPage(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User does not exist')
+        
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home:home')
+        else:
+            messages.error(request, 'Username or password does not exist')
+
+
+    return render(request, 'home/login_register.html')
+
+
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
@@ -26,11 +52,6 @@ def home(request):
         'topics':topics,
         'room_count': room_count
         })
-
-
-def logout(request):
-    auth_logout(request)
-    return render(request, 'registration/logout.html')
 
 
 def room(request, pk):
