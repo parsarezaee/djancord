@@ -4,7 +4,7 @@ from .forms import RoomForm
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth import logout as auth_logout
 
 
 @login_required
@@ -26,6 +26,11 @@ def home(request):
         'topics':topics,
         'room_count': room_count
         })
+
+
+def logout(request):
+    auth_logout(request)
+    return render(request, 'registration/logout.html')
 
 
 def room(request, pk):
