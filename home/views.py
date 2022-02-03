@@ -3,8 +3,11 @@ from .models import Room, Topic
 from .forms import RoomForm
 from django.views import View
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
+
+@login_required
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
