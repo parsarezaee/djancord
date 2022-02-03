@@ -12,7 +12,13 @@ from django.contrib.auth.decorators import login_required
 
 def loginPage(request):
 
+
+    if request.user.is_authenticated:
+        return redirect('home:home')
+
+
     if request.method == 'POST':
+        
         username = request.POST.get('username')
         password = request.POST.get('password')
 
