@@ -6,8 +6,7 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
-
-
+from django.contrib.auth.decorators import login_required
 
 
 def loginPage(request):
@@ -32,6 +31,10 @@ def loginPage(request):
 
     return render(request, 'home/login_register.html')
 
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home:home')
 
 
 def home(request):
@@ -59,62 +62,41 @@ def room(request, pk):
     return render(request, 'home/room.html', {'room':room})
 
 
-
-class CreateRoom(View):
+@login_required(login_url='home:login')
+def CreateRoom(request):
     template_name = 'home/room_form.html'
-
-
-    def get(self, request):
-        form = RoomForm()
-
-        return render(request, self.template_name, {'form':form})
-
-
-    def post(self, request):
-        if request.method == 'POST':
-            form = RoomForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('home:home')
+    form = RoomForm()
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home:home')
+    return render(request, template_name, {'form':form})
         
 
 
 
-
-class UpdateRoom(View):
+@login_required(login_url='home:login')
+def UpdateRoom(request, pk):
     template_name = 'home/room_form.html'
-
-    def get(self, request, pk):
-        room = Room.objects.get(id=pk)
-        form = RoomForm(instance=room)
-        return render(request, self.template_name, {'form':form})
-
-
-    def post(self, request, pk):
-        room = Room.objects.get(id=pk)
-        if request.method == 'POST':
-             form = RoomForm(request.POST, instance=room)
-             if form.is_valid():
-                 form.save()
-                 return redirect('home:home')
-
-
-
-
-class DeleteRoom(View):
-    template_name = 'home/delete.html'
-    
-    def get(self, request, pk):
-        room = Room.objects.get(id=pk) 
-
-        return render(request, self.template_name, {'obj':room})
-    
-
-    def post(self, request, pk):
-        room = Room.objects.get(id=pk) 
-
-        if request.method == 'POST':
-            room.delete()
+    room = Room.objects.get(id=pk)
+    form = RoomForm(instance=room)
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+        if form.is_valid():
+            form.save()
             return redirect('home:home')
+    return render(request, template_name, {'form':form})
+
+
+
+@login_required(login_url='home:login')
+def DeleteRoom(request, pk):
+    template_name = 'home/delete.html'
+    room = Room.objects.get(id=pk) 
+    if request.method == 'POST':
+        room.delete()
+        return redirect('home:home')
+    return render(request, template_name, {'obj':room})
 
 
