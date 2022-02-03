@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Room, Topic
 from .forms import RoomForm
@@ -81,6 +82,10 @@ def UpdateRoom(request, pk):
     template_name = 'home/room_form.html'
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+    
+    if request.user != room.host:
+        return HttpResponse('Your not allowed here')
+       
     if request.method == 'POST':
         form = RoomForm(request.POST, instance=room)
         if form.is_valid():
