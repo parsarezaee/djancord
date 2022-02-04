@@ -1,13 +1,16 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Room, Topic
-from .forms import RoomForm
+from .forms import RoomForm, UserRegistrationForm
 from django.views import View
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+
+
+
 
 
 def loginPage(request):
@@ -39,9 +42,34 @@ def loginPage(request):
     return render(request, 'home/login_register.html')
 
 
+
+
 def logoutUser(request):
     logout(request)
     return redirect('home:home')
+
+
+
+def SignupView(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            #create a new user but avoid saving yet
+            new_user = user_form.save(commit=False)
+            new_user.set_password(
+                user_form.cleaned_data['password']
+            )
+            new_user.save()
+            return render(request, 'registration/signup_done.html', {
+                'new_user': new_user
+            })
+    else:
+        user_form = UserRegistrationForm()
+    return render(request, 'registration/signup.html', 
+        {'user_form': user_form})
+
+
+
 
 
 def home(request):
@@ -67,6 +95,8 @@ def home(request):
 def room(request, pk):
     room = Room.objects.get(id=pk)
     return render(request, 'home/room.html', {'room':room})
+
+
 
 
 @login_required(login_url='home:login')
