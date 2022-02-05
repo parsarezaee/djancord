@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm, UserRegistrationForm
 from django.views import View
 from django.db.models import Q
@@ -94,7 +94,21 @@ def home(request):
 
 def room(request, pk):
     room = Room.objects.get(id=pk)
-    return render(request, 'home/room.html', {'room':room})
+    room_messages = room.message_set.all().order_by('-created')
+
+    if request.method == "POST":
+        message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body = request.POST.get('body')
+        )
+        return redirect('home:room', pk=room.id)
+
+    return render(request, 'home/room.html', {
+        'room':room,
+        'room_messages':room_messages
+    }
+    )
 
 
 
