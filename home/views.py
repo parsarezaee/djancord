@@ -50,6 +50,7 @@ def logoutUser(request):
 
 
 
+
 def SignupView(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -109,6 +110,7 @@ def room(request, pk):
         'room_messages':room_messages
     }
     )
+
 
 
 
