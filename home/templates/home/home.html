@@ -16,20 +16,7 @@
 <div class="home-container">
 
   <div>
-    <h3>Brows Topics</h3>
-    <hr>
-    
-    <div>
-      <a href="{% url 'home:home'%}">All</a>
-    </div>
-
-    {% for topic in topics %}
-      
-      <div>
-        <a href="{% url 'home:home'%}?q={{ topic.name }}">{{ topic }}</a>
-      </div>
-
-    {% endfor %}
+    {% include 'home/topics_component.html' %}
   </div>
 
 
