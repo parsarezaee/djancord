@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('room/<str:pk>/', views.room, name='room'),
     path('create-room/', views.CreateRoom, name='create-room'),
-   
+    path('profile/<str:pk>', views.UserProfile, name='user-profile'), 
    
     path('update-room/<str:pk>', views.UpdateRoom, name='update-room'),
     path('delete-room/<str:pk>', views.DeleteRoom, name='delete-room'),

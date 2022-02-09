@@ -98,6 +98,8 @@ def home(request):
         })
 
 
+
+
 def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all().order_by('-created')
@@ -120,7 +122,18 @@ def room(request, pk):
     )
 
 
+def UserProfile(request, pk):
+    user = User.objects.get(id=pk)
+    rooms = user.room_set.all()
+    room_messages = user.message_set.all()
+    topics = Topic.objects.all()
 
+    return render(request, 'home/profile.html', {
+        'user':user,
+        'rooms': rooms,
+        'topics':topics,
+        'room_messages': room_messages
+        })
 
 
 @login_required(login_url='home:login')
