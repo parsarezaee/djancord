@@ -140,10 +140,14 @@ def UserProfile(request, pk):
 def CreateRoom(request):
     template_name = 'home/room_form.html'
     form = RoomForm()
+
+
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user
+            room.save()
             return redirect('home:home')
     return render(request, template_name, {'form':form})
         
