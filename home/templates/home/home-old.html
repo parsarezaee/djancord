@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Djancord{% endblock %}
+
+
+{% block content %}
+
+<style>
+  .home-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+</style>
+
+
+<div class="home-container">
+
+  <div>
+    {% include 'home/topics_component.html' %}
+  </div>
+
+
+  <div>
+    <h5>{{ room_count }} rooms available</h5>
+    <a href="{% url 'home:create-room' %}">Create Room</a>
+
+
+    <div> 
+      {% include 'home/feed_component.html' %}
+    </div>
+
+    <div>
+      {% include 'home/activity_component.html' %}
+    </div>
+      
+  </div>  
+
+</div>
+{% endblock %}
