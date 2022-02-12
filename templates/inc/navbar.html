@@ -1,7 +1,8 @@
+{% load static %}
 <header class="header header--loggedIn">
   <div class="container">
     <a href="{% url 'home:home' %}" class="header__logo">
-      <img src="assets/logo.svg" />
+      <img src="{% static 'images/logo.svg' %}" />
       <h1>Djancord</h1>
     </a>
     <form class="header__search" method="GET" action="{% url 'home:home' %}">
@@ -16,20 +17,15 @@
       </label>
     </form>
     <nav class="header__menu">
-      <!-- Not Logged In -->
-      <!-- <a href="/login.html">
-        <img src="./assets/avatar.svg" />
-        <p>Login</p>
-      </a> -->
 
       <!-- Logged In -->
-
+      {% if user.is_authenticated %}
       <div class="header__user">
         <a href="profile.html">
           <div class="avatar avatar--medium active">
             <img src="https://randomuser.me/api/portraits/men/37.jpg" />
           </div>
-          <p>John Doe <span>@john_doe</span></p>
+          <p>{{ request.user.username }} <span>@{{ request.user.username }}</span></p>
         </a>
         <button class="dropdown-button">
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
@@ -38,6 +34,13 @@
           </svg>
         </button>
       </div>
+      {% else %}
+      <a href="{% url 'home:login' %}">
+        <img src="{% static 'images/avatar.svg' %}"/>
+        <p>Login</p>
+      </a>
+      {% endif %}
+
 
       <div class="dropdown-menu">
         <a href="settings.html" class="dropdown-link"
@@ -49,7 +52,7 @@
           </svg>
           Settings</a
         >
-        <a href="login.html" class="dropdown-link"
+        <a href="{% url 'home:logout' %}" class="dropdown-link"
           ><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
             <title>sign-out</title>
             <path
@@ -59,8 +62,7 @@
               d="M21.879 21.293l1.414 1.414 6.707-6.707-6.707-6.707-1.414 1.414 4.293 4.293h-14.172v2h14.172l-4.293 4.293z"
             ></path>
           </svg>
-          Logout</a
-        >
+          Logout</a>
       </div>
     </nav>
   </div>
@@ -70,10 +72,10 @@
 
 
 
-{% if user.is_authenticated %}
+{% comment %} {% if user.is_authenticated %}
   <a href="{% url 'home:logout' %}">Logout</a>
 {% else %}
 <a href="{% url 'home:login' %}">Login</a>
 <a href="{% url 'home:signup' %}">Sign Up</a>
 {% endif %}
-<hr>
+<hr> {% endcomment %}
