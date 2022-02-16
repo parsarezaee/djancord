@@ -140,16 +140,28 @@ def UserProfile(request, pk):
 def CreateRoom(request):
     template_name = 'home/room_form.html'
     form = RoomForm()
+    topics = Topic.objects.all()
 
 
     if request.method == 'POST':
-        form = RoomForm(request.POST)
-        if form.is_valid():
-            room = form.save(commit=False)
-            room.host = request.user
-            room.save()
-            return redirect('home:home')
-    return render(request, template_name, {'form':form})
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        
+        Room.objects.create(
+            host = request.user,
+            topic = topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description'),
+
+        )
+        return redirect('home:home')
+    
+    
+    return render(request, template_name, {
+        'form':form,
+        'topics':topics
+        }
+    )
         
 
 
@@ -159,16 +171,25 @@ def UpdateRoom(request, pk):
     template_name = 'home/room_form.html'
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+    topics = Topic.objects.all()
+
     
     if request.user != room.host:
         return HttpResponse('Your not allowed here')
        
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-        if form.is_valid():
-            form.save()
-            return redirect('home:home')
-    return render(request, template_name, {'form':form})
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        room.name = request.POST.get('name')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('home:home')
+    return render(request, template_name, {
+        'form':form,
+        'topics':topics,
+        'room':room
+        })
 
 
 
