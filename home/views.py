@@ -223,3 +223,7 @@ def DeleteMessage(request, pk):
         return redirect('home:home')
     return render(request, template_name, {'obj':message})
 
+
+@login_required(login_url='login')
+def updateuser(request):
+    return render(request, 'home/update-user.html')
