@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Room, Topic, Message
-from .forms import RoomForm, UserRegistrationForm
+from .forms import RoomForm, UserRegistrationForm, UserForm
 from django.views import View
 from django.db.models import Q
 from django.contrib import messages
@@ -226,4 +226,13 @@ def DeleteMessage(request, pk):
 
 @login_required(login_url='login')
 def updateuser(request):
-    return render(request, 'home/update-user.html')
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('home:user-profile', pk=user.id)
+
+    return render(request, 'home/update-user.html', {'form':form})
