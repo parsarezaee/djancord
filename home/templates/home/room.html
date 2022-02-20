@@ -92,6 +92,7 @@
                         <span>@{{message.user.username}}</span>
                       </a>
                       <span class="thread__date">{{message.created|timesince}} ago</span>
+    
                     </div>
                     {% if request.user == message.user %}
                     <a href="{% url 'home:delete-message' message.id">
@@ -141,5 +142,5 @@
         <!--  End -->
       </div>
     </main>
-    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static '/js/script.js' %}"></script>
 {% endblock %}
