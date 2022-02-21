@@ -3,6 +3,6 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-  <h1>Welcome {{ new_user.first_name }}</h1>
+  <h1>Welcome {{ user.username }}</h1>
   <p>Your account has been successfully created. Now you can <a href="{% url 'home:login' %}">log in</p>
 {% endblock %}
